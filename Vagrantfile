@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
+###
+# CoreOS configuration for Docker Containers
+###
 require 'fileutils'
 
 Vagrant.require_version ">= 1.6.0"
