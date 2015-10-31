@@ -17,6 +17,10 @@ services:
 		docker ps \
 	}
 
+###
+# Landing Page for Hosting services
+##
+
 LANDING_PAGE_URL=https://github.com/samuelreichert/feevale-hospedagem-web-2015.git
 LANDING_PAGE_PATH=/var/landing_page
 LANDING_PAGE_IMAGE=nginx
@@ -27,7 +31,7 @@ create-landing-page: check
 		sudo rm -rf $(LANDING_PAGE_PATH) && \
 		sudo git clone $(LANDING_PAGE_URL) $(LANDING_PAGE_PATH) && \
 		docker pull $(LANDING_PAGE_IMAGE) && \
-		docker run --name $(LANDING_PAGE_IMAGE) -v $(LANDING_PAGE_PATH):/usr/share/nginx/html:ro -p 80:80 -d $(LANDING_PAGE_IMAGE) \
+		docker run --name $(LANDING_PAGE_NAME) -v $(LANDING_PAGE_PATH):/usr/share/nginx/html:ro -p 80:80 -d $(LANDING_PAGE_IMAGE) \
 	}
 	echo "Server started!"
 	echo "Please, visit http://$(FIRST_ADDRESS)"
@@ -38,6 +42,10 @@ destroy-landing-page: check
 		docker rm -v $(LANDING_PAGE_IMAGE) \
 	}
 	echo "Server stoped!"
+
+###
+# Postgres database services
+###
 
 POSTGRES_IMAGE=postgres
 
