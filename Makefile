@@ -1,3 +1,5 @@
+FIRST_ADDRESS=172.17.8.101
+
 check: vagrant-exists
 
 vagrant-exists:
@@ -8,6 +10,12 @@ start: check
 
 stop: check
 	vagrant halt
+
+# List docker containers
+services:
+	@${call vrun,\
+		docker ps \
+	}
 
 LANDING_PAGE_URL=https://github.com/samuelreichert/feevale-hospedagem-web-2015.git
 LANDING_PAGE_PATH=/var/landing_page
@@ -21,12 +29,15 @@ create-landing-page: check
 		docker pull $(LANDING_PAGE_IMAGE) && \
 		docker run --name $(LANDING_PAGE_IMAGE) -v $(LANDING_PAGE_PATH):/usr/share/nginx/html:ro -p 80:80 -d $(LANDING_PAGE_IMAGE) \
 	}
+	echo "Server started!"
+	echo "Please, visit http://$(FIRST_ADDRESS)"
 
 destroy-landing-page: check
 	@${call vrun,\
 		docker stop $(LANDING_PAGE_IMAGE) && \
 		docker rm -v $(LANDING_PAGE_IMAGE) \
 	}
+	echo "Server stoped!"
 
 POSTGRES_IMAGE=postgres
 
