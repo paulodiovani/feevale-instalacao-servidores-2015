@@ -141,6 +141,8 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
       end
 
+      config.vm.provision :file, :source => "./dockerfiles", :destination => "/tmp/dockerfiles"
+      config.vm.provision :shell, :inline => "mv -bT /tmp/dockerfiles /var/dockerfiles", :privileged => true
     end
   end
 end
