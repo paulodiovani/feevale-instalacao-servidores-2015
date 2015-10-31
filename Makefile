@@ -15,7 +15,7 @@ LANDING_PAGE_IMAGE=nginx
 LANDING_PAGE_NAME=landing_page
 
 create-landing-page: check
-	${call vrun,\
+	@${call vrun,\
 		sudo rm -rf $(LANDING_PAGE_PATH) && \
 		sudo git clone $(LANDING_PAGE_URL) $(LANDING_PAGE_PATH) && \
 		docker pull $(LANDING_PAGE_IMAGE) && \
@@ -23,12 +23,32 @@ create-landing-page: check
 	}
 
 destroy-landing-page: check
-	${call vrun,\
+	@${call vrun,\
 		docker stop $(LANDING_PAGE_IMAGE) && \
 		docker rm -v $(LANDING_PAGE_IMAGE) \
 	}
 
+POSTGRES_IMAGE=postgres
+
+create-postgres: check
+	@while [ -z "$$DBNAME" ]; do \
+		read -r -p "Database name: " DBNAME;\
+	done && \
+	${call vrun,\
+		docker pull $(POSTGRES_IMAGE) && \
+		docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -d $(POSTGRES_IMAGE) \
+	}
+
+destroy-postgres: check
+	@while [ -z "$$DBNAME" ]; do \
+		read -r -p "Database name: " DBNAME;\
+	done && \
+	${call vrun,\
+		docker stop $$DBNAME && \
+		docker rm -v $$DBNAME \
+	}
+
 # Run a command on vagrant environment
 define vrun
-	@vagrant ssh core-01 -c '$1'
+	vagrant ssh core-01 -c "$1"
 endef
