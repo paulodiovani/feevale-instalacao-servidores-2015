@@ -45,8 +45,8 @@ create-landing-page: check
 
 destroy-landing-page: check
 	@${call vrun,\
-		docker stop $(LANDING_PAGE_IMAGE) && \
-		docker rm -v $(LANDING_PAGE_IMAGE) \
+		docker stop $(LANDING_PAGE_NAME) && \
+		docker rm -v $(LANDING_PAGE_NAME) \
 	}
 	echo "Server stoped!"
 
