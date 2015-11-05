@@ -1,5 +1,3 @@
-FIRST_ADDRESS=172.17.8.101
-
 # check for dependencies
 check: vagrant-exists
 
@@ -14,11 +12,16 @@ start: check
 stop: check
 	vagrant halt
 
-# List docker containers
+# list docker containers
 services: check
 	@${call vrun,\
 		docker ps \
 	}
+
+# get vm ip address
+getip:
+	@IP_ADDRESS=`${call getip}` && \
+	echo "ip address is $$IP_ADDRESS"
 
 ###
 # Landing Page for Hosting services
@@ -35,9 +38,10 @@ create-landing-page: check
 		sudo git clone $(LANDING_PAGE_URL) $(LANDING_PAGE_PATH) && \
 		docker pull $(LANDING_PAGE_IMAGE) && \
 		docker run --name $(LANDING_PAGE_NAME) -v $(LANDING_PAGE_PATH):/usr/share/nginx/html:ro -p 80:80 -d $(LANDING_PAGE_IMAGE) \
-	}
-	echo "Server started!"
-	echo "Please, visit http://$(FIRST_ADDRESS)"
+	} && \
+	IP_ADDRESS=`${call getip}` && \
+	echo "Server started!" && \
+	echo "Please, visit http://$$IP_ADDRESS"
 
 destroy-landing-page: check
 	@${call vrun,\
@@ -59,12 +63,13 @@ create-postgres: check
 	while [ -z "$$DBPORT" ]; do \
 		read -r -p "Database port: " DBPORT;\
 	done && \
+	IP_ADDRESS=`${call getip}` && \
 	${call vrun,\
 		docker pull $(POSTGRES_IMAGE) && \
 		docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) \
 	} && \
-	echo "Database $$DBNAME running on $(FIRST_ADDRESS) and port $$DBPORT." && \
-	echo "Connection URL postgres://postgres:@$(FIRST_ADDRESS):$$DBPORT/$$DBNAME"
+	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
+	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
 destroy-postgres: check
 	@while [ -z "$$DBNAME" ]; do \
@@ -80,4 +85,8 @@ destroy-postgres: check
 # @param cmd
 define vrun
 	vagrant ssh core-01 -c "$1"
+endef
+
+define getip
+	${call vrun,fleetctl list-machines --fields=ip --no-legend | head -n1}
 endef
