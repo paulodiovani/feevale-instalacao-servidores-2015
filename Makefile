@@ -14,11 +14,6 @@ start: check
 stop: check
 	vagrant halt
 
-# get a new etcd cluster token
-# see https://coreos.com/os/docs/latest/cluster-discovery.html
-token:
-	@curl -w "\n" 'https://discovery.etcd.io/new?size=3'
-
 # List docker containers
 services: check
 	@${call vrun,\
