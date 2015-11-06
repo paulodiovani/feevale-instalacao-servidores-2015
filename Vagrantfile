@@ -13,13 +13,14 @@ CONFIG = File.join(File.dirname(__FILE__), "config.rb")
 
 # Defaults for config options defined in CONFIG
 $num_instances = 1
+$network_type = :private_network
 $instance_name_prefix = "core"
-$update_channel = "alpha"
+$update_channel = "beta"
 $image_version = "current"
 $enable_serial_logging = false
 $share_home = false
 $vm_gui = false
-$vm_memory = 1024
+$vm_memory = 512
 $vm_cpus = 1
 $shared_folders = {}
 $forwarded_ports = {}
@@ -123,8 +124,8 @@ Vagrant.configure("2") do |config|
         vb.cpus = vm_cpus
       end
 
-      ip = "172.17.8.#{i+100}"
-      config.vm.network :private_network, ip: ip
+      ip = "192.168.1.#{i+127}"
+      config.vm.network $network_type, ip: ip
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
       #config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']

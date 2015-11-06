@@ -2,6 +2,11 @@
 
 Web hosting infrastructure for Feevale 2015.
 
+:warning: We're using [CoreOS][coreos] to run docker containers
+but until now the solution allow only a single instance.
+
+[coreos]: http://coreos.com
+
 ## Dependencies
 
 - GNU Make
@@ -18,13 +23,6 @@ cd feevale-instalacao-servidores-2015
 cp config.rb.sample config.rb
 cp user-data.sample user-data
 
-# get a new etc token
-make token
-
-# udate discovery url on user-data file
-# with the url obtained previously
-vim user-data
-
 # start VMs
 make start
 ```
@@ -38,9 +36,8 @@ make start
 # stop all VMs
 make stop
 
-# gets a new etcd cluster token
-# see https://coreos.com/os/docs/latest/cluster-discovery.html
-make token
+# get guest machine ip address
+make getip
 
 # list services running on containers
 make services
