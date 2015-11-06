@@ -2,6 +2,11 @@
 
 Web hosting infrastructure for Feevale 2015.
 
+:warning: We're using [CoreOS][coreos] to run docker containers
+but until now the solution allow only a single instance.
+
+[coreos]: http://coreos.com
+
 ## Dependencies
 
 - GNU Make
@@ -30,6 +35,9 @@ make start
 
 # stop all VMs
 make stop
+
+# get guest machine ip address
+make getip
 
 # list services running on containers
 make services
