@@ -4,7 +4,6 @@ Web hosting infrastructure for Feevale 2015.
 
 ## Dependencies
 
-- GNU Make
 - Vagrant
 
 ## Getting started
