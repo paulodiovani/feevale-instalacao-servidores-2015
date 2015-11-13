@@ -2,11 +2,6 @@
 
 Web hosting infrastructure for Feevale 2015.
 
-:warning: We're using [CoreOS][coreos] to run docker containers
-but until now the solution allow only a single instance.
-
-[coreos]: http://coreos.com
-
 ## Dependencies
 
 - GNU Make
@@ -19,34 +14,30 @@ but until now the solution allow only a single instance.
 git clone https://github.com/paulodiovani/feevale-instalacao-servidores-2015.git
 cd feevale-instalacao-servidores-2015
 
-# copy config files
-cp config.rb.sample config.rb
-cp user-data.sample user-data
-
 # start VMs
-make start
+vagrant up
 ```
 
-## Makefile commands
+
+## Access VMs
+
+You can access VM shell by using `vagrant ssh vm-name`
 
 ```console
-# start all VMs
-make start
+# access Taz web server
+vagrant ssh web
 
-# stop all VMs
-make stop
+# access Wile database server
+vagrant ssh db
+```
 
-# get guest machine ip address
-make getip
+For each VM you can run the `make` commands.
 
+### Database Makefile commands
+
+```console
 # list services running on containers
 make services
-
-# get and publish landing page
-make create-landing-page
-
-# unpublish and remove landing page
-make destroy-landing-page
 
 # create a PostgreSQL database
 make create-postgres
