@@ -15,6 +15,9 @@ Vagrant.configure(2) do |config|
   config.vm.define :web do |web|
     web.vm.hostname = 'wile'
 
+    ip = '192.168.1.128'
+    web.vm.network :public_network, ip: ip
+
     web.vm.provision :file, source: './makefiles/web.make', destination: '~/Makefile'
     web.vm.provision :file, source: './dockerfiles', destination: '/tmp/dockerfiles'
     web.vm.provision :shell, inline: 'mv -bT /tmp/dockerfiles /var/dockerfiles', privileged: true
@@ -24,6 +27,9 @@ Vagrant.configure(2) do |config|
   # database server
   config.vm.define :db do |db|
     db.vm.hostname = 'taz'
+
+    ip = '192.168.1.129'
+    db.vm.network :public_network, ip: ip
 
     db.vm.provision :file, source: './makefiles/db.make', destination: '~/Makefile'
     db.vm.provision :shell, path: './provisioning/db.sh'
