@@ -1,3 +1,8 @@
+# get vm ip address
+getip:
+	@IP_ADDRESS=`${call getip}` && \
+	echo "ip address is $$IP_ADDRESS"
+
 # check for dependencies
 check: docker-exists
 
@@ -8,11 +13,6 @@ docker-exists:
 services: check
 	docker ps
 
-# get vm ip address
-getip:
-	@IP_ADDRESS=`${call getip}` && \
-	echo "ip address is $$IP_ADDRESS"
-
 define getip
-	hostname -i
+	hostname -I | cut -d " " -f 2
 endef
