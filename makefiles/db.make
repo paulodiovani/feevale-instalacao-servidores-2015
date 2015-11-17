@@ -27,8 +27,7 @@ create-postgres: check
 		read -r -p "Database port: " DBPORT;\
 	done && \
 	IP_ADDRESS=`${call getip}` && \
-	docker pull $(POSTGRES_IMAGE) && \
-	docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) \
+	docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) && \
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
