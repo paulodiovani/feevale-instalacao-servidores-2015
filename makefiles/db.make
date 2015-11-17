@@ -13,6 +13,15 @@ docker-exists:
 services: check
 	docker ps
 
+# Destroy a service container
+destroy-service: check
+	@while [ -z "$$NAME" ]; do \
+		read -r -p "Service name: " NAME;\
+	done && \
+	docker stop $$NAME && \
+	docker rm -v $$NAME && \
+	echo "Service $$NAME destroyed!"
+
 ###
 # Postgres database services
 ###
@@ -31,13 +40,7 @@ create-postgres: check
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
-destroy-postgres: check
-	@while [ -z "$$DBNAME" ]; do \
-		read -r -p "Database name: " DBNAME;\
-	done && \
-	docker stop $$DBNAME && \
-	docker rm -v $$DBNAME && \
-	echo "Database $$DBNAME destroyed!"
+destroy-postgres: destroy-service
 
 define getip
 	hostname -I | cut -d " " -f 2
