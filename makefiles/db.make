@@ -16,7 +16,7 @@ services: check
 # Destroy a service container
 destroy-service: check
 	@while [ -z "$$NAME" ]; do \
-		read -r -p "Service name: " NAME;\
+		read -r -p "Service name: " NAME; \
 	done && \
 	docker stop $$NAME && \
 	docker rm -v $$NAME && \
@@ -30,10 +30,10 @@ POSTGRES_IMAGE=postgres
 
 create-postgres: check
 	@while [ -z "$$DBNAME" ]; do \
-		read -r -p "Database name: " DBNAME;\
+		read -r -p "Database name: " DBNAME; \
 	done && \
 	while [ -z "$$DBPORT" ]; do \
-		read -r -p "Database port: " DBPORT;\
+		read -r -p "Database port: " DBPORT; \
 	done && \
 	IP_ADDRESS=`${call getip}` && \
 	docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) && \
