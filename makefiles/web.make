@@ -23,12 +23,10 @@ destroy-service: check
 	echo "Service $$NAME destroyed!"
 
 ###
-# Createa a PHP/Apache app
+# Createa a PHP/MySQL app
 ###
 
-PHP_IMAGE=php:apache
-
-create-php: check
+create-php-mysql: check
 	@while [ -z "$$USERDIR" ] || [ ! -d /var/users/$$USERDIR ]; do \
 		read -r -p "User directory: " USERDIR; \
 	done && \
@@ -39,11 +37,15 @@ create-php: check
 		read -r -p "Http port: " PORT; \
 	done && \
 	IP_ADDRESS=`${call getip}` && \
-	docker run --name $$USERDIR -e DATABASE_URL=$$DBURL -p $$PORT:80 \
-		-v /var/users/$$USERDIR:/var/www/html -d $(PHP_IMAGE) && \
+	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
+		cp /var/dockerfiles/php-mysql.dockerfile /var/users/$$USERDIR/Dockerfile; \
+	fi && \
+	cd /var/users/$$USERDIR && \
+	docker build -t $$USERDIR . && \
+	docker run --name $$USERDIR -e DATABASE_URL=$$DBURL -p $$PORT:80 -d $$USERDIR && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
-destroy-php: destroy-service
+destroy-php-mysql: destroy-service
 
 define getip
 	hostname -I | cut -d " " -f 2
