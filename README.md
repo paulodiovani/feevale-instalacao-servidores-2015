@@ -31,8 +31,20 @@ vagrant ssh db
 ```
 
 For each VM you can run the `make` commands.
+### Web (Wile) Makefile commands
 
-### Database Makefile commands
+```console
+# list services running on containers
+make services
+
+# create a PHP/Apache server
+make create-php
+
+# destroy a PHP/Apache server
+make destroy-php
+```
+
+### Database (Taz) Makefile commands
 
 ```console
 # list services running on containers
