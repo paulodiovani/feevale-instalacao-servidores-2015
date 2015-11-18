@@ -21,7 +21,7 @@ Vagrant.configure(2) do |config|
 
     web.vm.provision :file, source: './makefiles/web.make', destination: '~/Makefile'
     web.vm.provision :file, source: './dockerfiles', destination: '/tmp/dockerfiles'
-    web.vm.provision :shell, inline: 'mv -bT /tmp/dockerfiles /var/dockerfiles', privileged: true
+    web.vm.provision :shell, inline: 'rm -rf /var/dockerfiles && mv -bT /tmp/dockerfiles /var/dockerfiles'
     web.vm.provision :shell, path: './provisioning/web.sh'
   end
 
