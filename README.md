@@ -37,11 +37,11 @@ For each VM you can run the `make` commands.
 # list services running on containers
 make services
 
-# create a PHP/Apache server
-make create-php
+# create a PHP/MySQL server
+make create-php-mysql
 
-# destroy a PHP/Apache server
-make destroy-php
+# destroy a PHP/MySQL server
+make destroy-php-mysql
 ```
 
 ### Database (Taz) Makefile commands
