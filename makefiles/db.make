@@ -13,6 +13,15 @@ docker-exists:
 services: check
 	docker ps
 
+# Destroy a service container
+destroy-service: check
+	@while [ -z "$$NAME" ]; do \
+		read -r -p "Service name: " NAME; \
+	done && \
+	docker stop $$NAME && \
+	docker rm -v $$NAME && \
+	echo "Service $$NAME destroyed!"
+
 ###
 # Postgres database services
 ###
@@ -21,23 +30,38 @@ POSTGRES_IMAGE=postgres
 
 create-postgres: check
 	@while [ -z "$$DBNAME" ]; do \
-		read -r -p "Database name: " DBNAME;\
+		read -r -p "Database name: " DBNAME; \
 	done && \
 	while [ -z "$$DBPORT" ]; do \
-		read -r -p "Database port: " DBPORT;\
+		read -r -p "Database port: " DBPORT; \
 	done && \
 	IP_ADDRESS=`${call getip}` && \
 	docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) && \
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
-destroy-postgres: check
+destroy-postgres: destroy-service
+
+###
+# MySQL Server
+###
+
+MYSQL_IMAGE=mysql
+
+create-mysql: check
 	@while [ -z "$$DBNAME" ]; do \
 		read -r -p "Database name: " DBNAME;\
 	done && \
-	docker stop $$DBNAME && \
-	docker rm -v $$DBNAME && \
-	echo "Database $$DBNAME destroyed!"
+	while [ -z "$$DBPORT" ]; do \
+		read -r -p "Database port: " DBPORT;\
+	done && \
+	IP_ADDRESS=`${call getip}` && \
+	docker run --name $$DBNAME -e MYSQL_DATABASE=$$DBNAME -e MYSQL_ROOT_PASSWORD=root \
+		-p $$DBPORT:3306 -d $(MYSQL_IMAGE) && \
+	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
+	echo "Connection URL mysql://root:root@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
+
+destroy-mysql: destroy-service
 
 define getip
 	hostname -I | cut -d " " -f 2
