@@ -37,6 +37,12 @@ For each VM you can run the `make` commands.
 # list services running on containers
 make services
 
+# create a NGINX static server
+make create-nginx
+
+# destroy a NGINX static server
+make destroy-nginx
+
 # create a PHP/MySQL server
 make create-php-mysql
 
