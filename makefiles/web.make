@@ -23,9 +23,29 @@ destroy-service: check
 	echo "Service $$NAME destroyed!"
 
 ###
-# Createa a PHP/MySQL app
+# Creates a NGINX static site
 ###
+create-nginx: check
+	@while [ -z "$$USERDIR" ] || [ ! -d /var/users/$$USERDIR ]; do \
+		read -r -p "User directory: " USERDIR; \
+	done && \
+	while [ -z "$$PORT" ]; do \
+		read -r -p "Http port: " PORT; \
+	done && \
+	IP_ADDRESS=`${call getip}` && \
+	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
+		cp /var/dockerfiles/nginx.dockerfile /var/users/$$USERDIR/Dockerfile; \
+	fi && \
+	cd /var/users/$$USERDIR && \
+	docker build -t $$USERDIR . && \
+	docker run --name $$USERDIR -p $$PORT:80 -d $$USERDIR && \
+	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
+destroy-nginx: destroy-service
+
+###
+# Creates a PHP/MySQL app
+###
 create-php-mysql: check
 	@while [ -z "$$USERDIR" ] || [ ! -d /var/users/$$USERDIR ]; do \
 		read -r -p "User directory: " USERDIR; \
