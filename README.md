@@ -57,9 +57,9 @@ make create-postgres
 make destroy-postgres
 
 # create a MySQL database
-make create-postgres
+make create-mysql
 
 # destroy a MySQL database
-make destroy-postgres
+make destroy-mysql
 ```
 
