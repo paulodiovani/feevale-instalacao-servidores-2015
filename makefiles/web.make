@@ -14,13 +14,13 @@ services: check
 	docker ps
 
 # Destroy a service container
-destroy-service: check
+destroy-app: check
 	@while [ -z "$$NAME" ]; do \
-		read -r -p "Service name: " NAME;\
+		read -r -p "Application name: " NAME;\
 	done && \
 	docker stop $$NAME && \
 	docker rm -v $$NAME && \
-	echo "Service $$NAME destroyed!"
+	echo "Application $$NAME destroyed!"
 
 ###
 # Creates a NGINX static site
@@ -41,7 +41,7 @@ create-nginx: check
 	docker run --name $$USERDIR -p $$PORT:80 -d $$USERDIR && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
-destroy-nginx: destroy-service
+destroy-nginx: destroy-app
 
 ###
 # Creates a PHP/MySQL app
@@ -65,7 +65,7 @@ create-php-mysql: check
 	docker run --name $$USERDIR -e DATABASE_URL=$$DBURL -p $$PORT:80 -d $$USERDIR && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
-destroy-php-mysql: destroy-service
+destroy-php-mysql: destroy-app
 
 define getip
 	hostname -I | cut -d " " -f 2
