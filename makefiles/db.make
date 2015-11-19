@@ -14,13 +14,13 @@ services: check
 	docker ps
 
 # Destroy a service container
-destroy-service: check
+destroy-database: check
 	@while [ -z "$$NAME" ]; do \
-		read -r -p "Service name: " NAME; \
+		read -r -p "Database name: " NAME; \
 	done && \
 	docker stop $$NAME && \
 	docker rm -v $$NAME && \
-	echo "Service $$NAME destroyed!"
+	echo "Database $$NAME destroyed!"
 
 ###
 # Postgres database services
@@ -40,7 +40,7 @@ create-postgres: check
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
-destroy-postgres: destroy-service
+destroy-postgres: destroy-database
 
 ###
 # MySQL Server
@@ -61,7 +61,7 @@ create-mysql: check
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL mysql://root:root@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
-destroy-mysql: destroy-service
+destroy-mysql: destroy-database
 
 define getip
 	hostname -I | cut -d " " -f 2

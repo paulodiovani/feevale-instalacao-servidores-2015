@@ -8,4 +8,5 @@ if [ ! -d /var/users ]; then
 fi
 
 echo "Downloading docker images"
+docker pull nginx > /dev/null
 docker pull php:apache > /dev/null
