@@ -20,6 +20,7 @@ destroy-app: check
 	done && \
 	docker stop $$NAME && \
 	docker rm -v $$NAME && \
+	docker rmi $$NAME && \
 	echo "Application $$NAME destroyed!"
 
 ###
