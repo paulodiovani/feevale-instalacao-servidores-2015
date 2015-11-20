@@ -45,6 +45,31 @@ create-nginx: check
 destroy-nginx: destroy-app
 
 ###
+# Creates a Node.js site
+###
+create-node: check
+	@while [ -z "$$USERDIR" ] || [ ! -d /var/users/$$USERDIR ]; do \
+		read -r -p "User directory: " USERDIR; \
+	done && \
+	while [ -z "$$PORT" ]; do \
+		read -r -p "Http port: " PORT; \
+	done && \
+	while [ -z "$$NODEVERSION" ] || [ "0.12 4 5" =~ "$$NODEVERSION" ]; do \
+		read -r -p "Node version [0.12, 4, 5]: " NODEVERSION; \
+	done && \
+	IP_ADDRESS=`${call getip}` && \
+	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
+		cp /var/dockerfiles/node"$$NODEVERSION".dockerfile /var/users/$$USERDIR/Dockerfile; \
+	fi && \
+	cd "/var/users/$$USERDIR" && \
+	docker build -t "$$USERDIR" . && \
+	docker run --name "$$USERDIR" -e PORT="3000" -e DATABASE_URL="$$DBURL" \
+		-p "$$PORT":"3000" -d "$$USERDIR" && \
+	echo "Server running at http://$$IP_ADDRESS:$$PORT"
+
+destroy-node: destroy-app
+
+###
 # Creates a PHP/MySQL app
 ###
 create-php-apache: check
