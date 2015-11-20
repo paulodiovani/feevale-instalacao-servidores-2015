@@ -43,11 +43,11 @@ make create-nginx
 # destroy a NGINX static server
 make destroy-nginx
 
-# create a PHP/MySQL server
-make create-php-mysql
+# create a PHP/Apache server
+make create-php-apache
 
-# destroy a PHP/MySQL server
-make destroy-php-mysql
+# destroy a PHP/Apache server
+make destroy-php-apache
 ```
 
 ### Database (Taz) Makefile commands

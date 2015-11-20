@@ -47,7 +47,7 @@ destroy-nginx: destroy-app
 ###
 # Creates a PHP/MySQL app
 ###
-create-php-mysql: check
+create-php-apache: check
 	@while [ -z "$$USERDIR" ] || [ ! -d /var/users/$$USERDIR ]; do \
 		read -r -p "User directory: " USERDIR; \
 	done && \
@@ -59,14 +59,14 @@ create-php-mysql: check
 	done && \
 	IP_ADDRESS=`${call getip}` && \
 	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
-		cp /var/dockerfiles/php-mysql.dockerfile /var/users/$$USERDIR/Dockerfile; \
+		cp /var/dockerfiles/php-apache.dockerfile /var/users/$$USERDIR/Dockerfile; \
 	fi && \
 	cd /var/users/$$USERDIR && \
 	docker build -t $$USERDIR . && \
 	docker run --name $$USERDIR -e DATABASE_URL=$$DBURL -p $$PORT:80 -d $$USERDIR && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
-destroy-php-mysql: destroy-app
+destroy-php-apache: destroy-app
 
 define getip
 	hostname -I | cut -d " " -f 2
