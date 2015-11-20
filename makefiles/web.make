@@ -37,9 +37,9 @@ create-nginx: check
 	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
 		cp /var/dockerfiles/nginx.dockerfile /var/users/$$USERDIR/Dockerfile; \
 	fi && \
-	cd /var/users/$$USERDIR && \
-	docker build -t $$USERDIR . && \
-	docker run --name $$USERDIR -p $$PORT:80 -d $$USERDIR && \
+	cd "/var/users/$$USERDIR" && \
+	docker build -t "$$USERDIR" . && \
+	docker run --name "$$USERDIR" -p "$$PORT":"80" -d "$$USERDIR" && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
 destroy-nginx: destroy-app
@@ -61,9 +61,9 @@ create-php-apache: check
 	if [ ! -f /var/users/$$USERDIR/Dockerfile ]; then \
 		cp /var/dockerfiles/php-apache.dockerfile /var/users/$$USERDIR/Dockerfile; \
 	fi && \
-	cd /var/users/$$USERDIR && \
-	docker build -t $$USERDIR . && \
-	docker run --name $$USERDIR -e DATABASE_URL=$$DBURL -p $$PORT:80 -d $$USERDIR && \
+	cd "/var/users/$$USERDIR" && \
+	docker build -t "$$USERDIR" . && \
+	docker run --name "$$USERDIR" -e DATABASE_URL="$$DBURL" -p "$$PORT":"80" -d "$$USERDIR" && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
 destroy-php-apache: destroy-app

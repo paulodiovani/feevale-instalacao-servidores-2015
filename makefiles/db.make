@@ -36,7 +36,7 @@ create-postgres: check
 		read -r -p "Database port: " DBPORT; \
 	done && \
 	IP_ADDRESS=`${call getip}` && \
-	docker run --name $$DBNAME -e POSTGRES_DB=$$DBNAME -p $$DBPORT:5432 -d $(POSTGRES_IMAGE) && \
+	docker run --name "$$DBNAME" -e POSTGRES_DB="$$DBNAME" -p "$$DBPORT":"5432" -d $(POSTGRES_IMAGE) && \
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL postgres://postgres:@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
@@ -56,8 +56,8 @@ create-mysql: check
 		read -r -p "Database port: " DBPORT;\
 	done && \
 	IP_ADDRESS=`${call getip}` && \
-	docker run --name $$DBNAME -e MYSQL_DATABASE=$$DBNAME -e MYSQL_ROOT_PASSWORD=root \
-		-p $$DBPORT:3306 -d $(MYSQL_IMAGE) && \
+	docker run --name "$$DBNAME" -e MYSQL_DATABASE="$$DBNAME" -e MYSQL_ROOT_PASSWORD=root \
+		-p "$$DBPORT":"3306" -d $(MYSQL_IMAGE) && \
 	echo "Database $$DBNAME running on $$IP_ADDRESS and port $$DBPORT." && \
 	echo "Connection URL mysql://root:root@$$IP_ADDRESS:$$DBPORT/$$DBNAME"
 
