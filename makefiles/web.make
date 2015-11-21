@@ -13,6 +13,18 @@ docker-exists:
 services: check
 	docker ps
 
+NAS_ADDRESS=192.168.1.130
+NAS_HOMES=/export/home
+USER_DIRS=/var/users
+
+# Mount NAS user directories
+mount:
+	mount -t nfs $(NAS_ADDRESS):$(NAS_HOMES) $(USER_DIRS)
+
+# Umount NAS user directories
+umount:
+	umount $(USER_DIRS)
+
 # Destroy a service container
 destroy-app: check
 	@while [ -z "$$NAME" ]; do \

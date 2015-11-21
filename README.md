@@ -37,6 +37,12 @@ For each VM you can run the `make` commands.
 # list services running on containers
 make services
 
+# Mount user directories from NAS
+make mount
+
+# Umount user directories from NAS
+make umount
+
 # create a NGINX static server
 make create-nginx
 
