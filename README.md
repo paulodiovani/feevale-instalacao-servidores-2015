@@ -75,3 +75,13 @@ make create-mysql
 make destroy-mysql
 ```
 
+## Creating new application
+
+1. Criar user no NAS e ajuste de permissões
+1. Passar os dados de conexão FTP para cliente (com o caminho da pasta)
+1. Criar BD no Taz com o nome que o cliente pediu
+1. Passar os dados de acesso pro cliente
+1. Cria aplicação no Wile (`sudo make create-php-apache`)
+1. Ajusta nginxconf com o novo dominio
+1. Recria nginx conf (`make destroy-nginx` e `sudo make create-nginx`)
+1. Pede acesso ao dominio pro professor
