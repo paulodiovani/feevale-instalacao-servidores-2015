@@ -18,7 +18,7 @@ destroy-database: check
 	@while [ -z "$$NAME" ]; do \
 		read -r -p "Database name: " NAME; \
 	done && \
-	docker stop $$NAME && \
+	docker stop $$NAME ; \
 	docker rm -v $$NAME && \
 	echo "Database $$NAME destroyed!"
 

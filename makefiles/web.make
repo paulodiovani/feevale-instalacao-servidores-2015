@@ -30,7 +30,7 @@ destroy-app: check
 	@while [ -z "$$NAME" ]; do \
 		read -r -p "Application name: " NAME;\
 	done && \
-	docker stop $$NAME && \
+	docker stop $$NAME ; \
 	docker rm -v $$NAME && \
 	docker rmi $$NAME && \
 	echo "Application $$NAME destroyed!"
