@@ -30,7 +30,7 @@ destroy-app: check
 	@while [ -z "$$NAME" ]; do \
 		read -r -p "Application name: " NAME;\
 	done && \
-	docker stop $$NAME && \
+	docker stop $$NAME ; \
 	docker rm -v $$NAME && \
 	docker rmi $$NAME && \
 	echo "Application $$NAME destroyed!"
@@ -51,7 +51,10 @@ create-nginx: check
 	fi && \
 	cd "/var/users/$$USERDIR" && \
 	docker build -t "$$USERDIR" . && \
-	docker run --name "$$USERDIR" -p "$$PORT":"80" -d "$$USERDIR" && \
+	docker run --restart always \
+		--name "$$USERDIR" \
+		-p "$$PORT":"80" \
+		-d "$$USERDIR" && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
 destroy-nginx: destroy-app
@@ -75,7 +78,11 @@ create-php-apache: check
 	fi && \
 	cd "/var/users/$$USERDIR" && \
 	docker build -t "$$USERDIR" . && \
-	docker run --name "$$USERDIR" -e DATABASE_URL="$$DBURL" -p "$$PORT":"80" -d "$$USERDIR" && \
+	docker run --restart always \
+		--name "$$USERDIR" \
+		-e DATABASE_URL="$$DBURL" \
+		-p "$$PORT":"80" \
+		-d "$$USERDIR" && \
 	echo "Server running at http://$$IP_ADDRESS:$$PORT"
 
 destroy-php-apache: destroy-app
